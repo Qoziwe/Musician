@@ -1,38 +1,38 @@
 const songsList = [
   {
-    key: "Zlo",
-    link: "./songs/Zlo.mp3",
-    album: "Quo Vadis?",
-    imgLink: "./images/albumsIMGS/QuoVadis.jpg",
+    key: "Midnight Madonna",
+    link: "./songs/MidnightMadonna.mp3",
+    author: "Powerwolf",
+    imgLink: "./images/albumsIMGS/MidnightMadonna.jpeg",
   },
   {
-    key: "Vesna",
-    link: "./songs/Vesna.mp3",
-    album: "Eto ne lubov",
-    imgLink: "./images/albumsIMGS/etonelubov.jpg",
+    key: "Moskau",
+    link: "./songs/Moskau.mp3",
+    author: "Rammstein",
+    imgLink: "./images/albumsIMGS/ReiseReise.png",
+  },
+  {
+    key: "Zlo",
+    link: "./songs/Zlo.mp3",
+    author: "Electroforez",
+    imgLink: "./images/albumsIMGS/QuoVadis.jpg",
   },
   {
     key: "Odnazdy",
     link: "./songs/Odnazhdy.mp3",
-    album: "Krugom Vragi",
+    author: "Animatsiya",
     imgLink: "./images/albumsIMGS/krugomvragi.png",
   },
   {
     key: "Stuk",
     link: "./songs/Stuk.mp3",
-    album: "Legenda",
+    author: "Kino",
     imgLink: "./images/albumsIMGS/legenda.png",
-  },
-  {
-    key: "ChioChioSan",
-    link: "./songs/ChioChioSan.mp3",
-    album: "Vokrug Sveta",
-    imgLink: "./images/albumsIMGS/vokrugsveta.jpg",
   },
   {
     key: "Peremen",
     link: "./songs/Peremen.mp3",
-    album: "Legenda",
+    author: "Kino",
     imgLink: "./images/albumsIMGS/legenda.png",
   },
 ];
@@ -70,7 +70,7 @@ function updateUI() {
     <img src="${currentSong.imgLink}" alt="" />
     <span>
       <h1>${currentSong.key}</h1>
-      <p>Album: "${currentSong.album}"</p>
+      <p>Author: "${currentSong.author}"</p>
     </span>
   </div>`;
 
@@ -244,6 +244,21 @@ playButton.onclick = () => {
   } else {
     audio.pause();
     stopRotation();
+  }
+};
+document.onkeydown = function iziz(iz) {
+  if (iz.keyCode == "32") {
+    if (audio.paused) {
+      if (wasPlayed == 0) {
+        playSong(0);
+        wasPlayed = 1;
+      }
+      audio.play();
+      startRotation();
+    } else {
+      audio.pause();
+      stopRotation();
+    }
   }
 };
 backwardButton.onclick = function () {

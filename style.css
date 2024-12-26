@@ -260,8 +260,9 @@ main {
   align-items: start;
 }
 #MC-SSC-SC-Song span h1 {
+  width: 100%;
   color: aliceblue;
-  font-size: 2vw;
+  font-size: 1.37vw;
   font-family: "SourceCodePro";
   font-weight: 300;
   /* letter-spacing: 0.2vw; */
