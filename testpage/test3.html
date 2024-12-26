@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Модальное окно</title>
+    <style>
+      /* Стиль для кнопки */
+      #MC-SCC-M-B-C-Accords {
+        padding: 10px 20px;
+        background-color: #333;
+        color: white;
+        cursor: pointer;
+        border: none;
+        font-size: 16px;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      /* Модальное окно */
+      #modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        height: 300px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        display: none; /* Модальное окно скрыто по умолчанию */
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      #modal.open {
+        display: block; /* Показываем модальное окно */
+      }
+
+      /* Крестик для закрытия */
+      .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        cursor: pointer;
+        color: white;
+      }
+
+      /* Стиль для элементов SVG */
+      #MC-SCC-M-B-C-Accords svg path {
+        fill: black; /* Изначальный цвет */
+        transition: fill 0.3s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Кнопка для открытия модального окна -->
+    <button id="MC-SCC-M-B-C-Accords">
+      Открыть модальное окно
+      <svg width="24" height="24">
+        <path d="M5 8L19 8L19 10L5 10L5 8Z" />
+      </svg>
+    </button>
+
+    <!-- Модальное окно -->
+    <div id="modal">
+      <span class="close-btn" id="close-btn">×</span>
+      <h2>Модальное окно</h2>
+      <p>Контент модального окна...</p>
+    </div>
+
+    <script>
+      const accordsButton = document.getElementById("MC-SCC-M-B-C-Accords");
+      const modal = document.getElementById("modal");
+      const closeButton = document.getElementById("close-btn");
+
+      // Функция для открытия и закрытия модального окна
+      function toggleModal() {
+        modal.classList.toggle("open"); // Добавляем или убираем класс .open для отображения окна
+      }
+
+      // Функция для изменения атрибута fill у всех path в SVG
+      function changeSVGFill() {
+        const svgPaths = document.querySelectorAll(
+          "#MC-SCC-M-B-C-Accords svg path"
+        );
+        svgPaths.forEach((path) => {
+          path.setAttribute("fill", "white"); // Меняем цвет fill на белый
+        });
+      }
+
+      // Обработчик для кнопки
+      accordsButton.addEventListener("click", function () {
+        toggleModal(); // Открываем или закрываем окно
+        changeSVGFill(); // Меняем цвет fill у всех path
+      });
+
+      // Обработчик для кнопки закрытия окна
+      closeButton.addEventListener("click", function () {
+        toggleModal(); // Закрываем окно
+      });
+    </script>
+  </body>
+</html>
