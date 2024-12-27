@@ -479,6 +479,7 @@ function nextTrack() {
       songsTexts.songsTextsFunction(playOrder[currentSongIndex]);
     }
   }
+  updateMediaSessionMetadata();
 }
 function prevTrack() {
   if (wasPlayed == 0) {
@@ -493,6 +494,7 @@ function prevTrack() {
       songsTexts.songsTextsFunction(playOrder[currentSongIndex]);
     }
   }
+  updateMediaSessionMetadata();
 }
 if ("mediaSession" in navigator) {
   navigator.mediaSession.setActionHandler("play", () => {
