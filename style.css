@@ -52,6 +52,8 @@ main {
   background-repeat: no-repeat;
   background-position: 50% 100%;
   position: relative;
+  display: flex;
+  /* align-items: end; */
   border-radius: 5vw;
   grid-column: 1;
   grid-row: span 2;
@@ -61,7 +63,7 @@ main {
   display: grid;
   grid-template-columns: 5.5vw 0vw;
   grid-template-rows: 5.5vw 0vw;
-  position: relative;
+  position: absolute;
 }
 #MC-Account svg:nth-child(1) {
   grid-column: 2;
@@ -99,14 +101,15 @@ main {
   height: calc(80vh - 10vw);
   /* height: 58vh; */
   background-color: #2b2b2b;
+  /* position: absolute; */
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1vw;
-  margin: 2vh 0 0 1vw;
+  margin: 12.5vh 0 0 1vw;
   padding: 1vw 0 1vw 0;
   border-radius: 5vw;
-  z-index: 2;
+  z-index: 1;
   box-sizing: border-box;
   writing-mode: vertical-rl;
   direction: rtl;
@@ -196,6 +199,7 @@ main {
   grid-template-columns: 17vw 8vw;
   grid-template-rows: 3vw 7vw;
   margin: 0 0 1vw 1vw;
+  z-index: 1;
 }
 #MC-SSC-Article {
   width: 100%;
@@ -302,6 +306,7 @@ main {
   grid-template-rows: 4vw 12vw;
   align-items: end;
   transition: ease-in-out 300ms;
+  z-index: 1;
 }
 #MC-SCC-Corner:nth-child(1) {
   width: 4vw;
@@ -487,6 +492,68 @@ main {
 #MC-SCC-Main input[type="range"]:focus::-ms-fill-lower,
 #MC-SCC-Main input[type="range"]:focus::-ms-fill-upper {
   background: #888888;
+}
+
+#MC-ModalWindowContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: none;
+  align-items: end;
+  margin: 0 auto;
+  padding: 1vw 1vw 9vw 1vw;
+  box-sizing: border-box;
+  z-index: 0;
+}
+#MC-MWC-Modal {
+  width: 100%;
+  height: 100%;
+  background-color: #2b2b2baa;
+  display: flex;
+  border-radius: 5vw;
+  padding: 3vw;
+  box-sizing: border-box;
+}
+#MC-MWC-Modal div {
+  width: 60%;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+}
+#MC-MWC-Modal div:nth-child(2) {
+  width: 40%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+#MC-MWC-Modal div::-webkit-scrollbar {
+  width: 0.5vw;
+  background-color: #333;
+  border-radius: 1vw;
+}
+#MC-MWC-Modal div::-webkit-scrollbar-thumb {
+  background-color: #fff;
+  border-radius: 1vw;
+  box-shadow: 0 0 1vw rgba(255, 255, 255, 0.6);
+}
+#MC-MWC-Modal div::-webkit-scrollbar-track {
+  background-color: #333;
+  border-radius: 1vw;
+}
+#MC-MWC-Modal div:nth-child(2) {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+#MC-MWC-Modal div p {
+  font-size: 1.2vw;
+  font-family: "Raleway";
+  word-spacing: 0.2vw;
+  color: aliceblue;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  display: block;
 }
 
 #ButtonsContainer {

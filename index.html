@@ -265,7 +265,10 @@
                     />
                   </svg>
                 </button>
-                <button id="MC-SCC-M-B-C-Accords">
+                <button
+                  id="MC-SCC-M-B-C-Accords"
+                  onclick="ModalClickListener()"
+                >
                   <svg
                     width="800px"
                     height="800px"
@@ -370,6 +373,12 @@
             />
           </svg>
         </div>
+        <div id="MC-ModalWindowContainer">
+          <div id="MC-MWC-Modal">
+            <div id="MC-MWC-M-Verse"></div>
+            <div id="MC-MWC-M-Chorus"></div>
+          </div>
+        </div>
       </section>
       <section id="ButtonsContainer">
         <div id="BC-Container">
@@ -426,5 +435,5 @@
       <section id="PlaylistContainer"></section>
     </main>
   </body>
-  <script src="./script.js"></script>
+  <script type="module" src="./script.js"></script>
 </html>
