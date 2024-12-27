@@ -288,6 +288,7 @@ document.onkeydown = function spaceButton(button) {
   }
 };
 backwardButton.onclick = function () {
+  updateMediaSessionMetadata();
   if (wasPlayed == 0) {
     playSong(0);
     wasPlayed = 1;
@@ -302,6 +303,7 @@ backwardButton.onclick = function () {
   }
 };
 forwardButton.onclick = function () {
+  updateMediaSessionMetadata();
   if (wasPlayed == 0) {
     playSong(0);
     wasPlayed = 1;
@@ -316,6 +318,7 @@ forwardButton.onclick = function () {
   }
 };
 shuffleButton.onclick = () => {
+  updateMediaSessionMetadata();
   isShuffled = !isShuffled;
   playOrder = isShuffled
     ? playOrder.sort(() => Math.random() - 0.5)
@@ -429,53 +432,72 @@ function updateMediaSessionMetadata() {
   navigator.mediaSession.metadata = new MediaMetadata({
     title: track.key,
     artist: track.author,
+    album: track.album || "Unknown Album", // Если альбом не указан, выводим 'Unknown Album'
+    artwork: [
+      {
+        src: track.link || "default-image.png",
+        sizes: "512x512",
+        type: "image/png",
+      }, // Для обложки
+    ],
   });
-  if ("mediaSession" in navigator) {
-    navigator.mediaSession.metadata = new MediaMetadata(metadata);
-    navigator.mediaSession.setPositionState({
-      duration: audio.duration || 0,
-      position: audio.currentTime || 0,
-    });
-  }
+
+  // Синхронизация текущего времени с медиа-сессией
+  navigator.mediaSession.setPositionState({
+    duration: audio.duration || 0, // Общая продолжительность трека
+    position: audio.currentTime || 0, // Текущее время воспроизведения
+    playbackRate: audio.playbackRate || 1, // Скорость воспроизведения
+  });
 }
+
+// Функция для воспроизведения следующего трека
 function nextTrack() {
   if (wasPlayed == 0) {
     playSong(0);
     wasPlayed = 1;
   }
-  playSong((currentSongIndex + 1) % playOrder.length);
-  updateMediaSessionMetadata();
+  playSong((currentSongIndex + 1) % playOrder.length); // Переходим к следующему треку
+  updateMediaSessionMetadata(); // Обновление метаданных медиасессии
   if (modalMode == "songText") {
     songsTexts.songsTextsFunction(playOrder[currentSongIndex]);
   }
 }
 
+// Функция для воспроизведения предыдущего трека
 function prevTrack() {
   if (wasPlayed == 0) {
     playSong(0);
     wasPlayed = 1;
   }
-  playSong((currentSongIndex - 1 + playOrder.length) % playOrder.length);
-  updateMediaSessionMetadata();
+  playSong((currentSongIndex - 1 + playOrder.length) % playOrder.length); // Переходим к предыдущему треку
+  updateMediaSessionMetadata(); // Обновление метаданных медиасессии
   if (modalMode == "songText") {
     songsTexts.songsTextsFunction(playOrder[currentSongIndex]);
   }
 }
 
+// Проверяем, поддерживает ли браузер медиасессию
 if ("mediaSession" in navigator) {
+  // Обработчик действия "play"
   navigator.mediaSession.setActionHandler("play", () => {
     if (wasPlayed == 0) {
       playSong(0);
       wasPlayed = 1;
     }
-    audio.play();
-    startRotation();
-    updateMediaSessionMetadata();
+    audio.play(); // Начинаем воспроизведение
+    startRotation(); // Начинаем вращение (если нужно)
+    updateMediaSessionMetadata(); // Обновляем метаданные при запуске воспроизведения
   });
+
+  // Обработчик действия "pause"
   navigator.mediaSession.setActionHandler("pause", () => {
-    audio.pause();
-    stopRotation();
+    audio.pause(); // Ставим на паузу
+    stopRotation(); // Останавливаем вращение (если нужно)
   });
+
+  // Обработчик действия "nexttrack"
   navigator.mediaSession.setActionHandler("nexttrack", nextTrack);
+
+  // Обработчик действия "previoustrack"
   navigator.mediaSession.setActionHandler("previoustrack", prevTrack);
 }
