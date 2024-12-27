@@ -425,54 +425,26 @@ updateUI();
 //
 //
 function updateMediaSessionMetadata() {
+  const track = songsList[playOrder[currentSongIndex]];
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: track.key,
+    artist: track.author,
+  });
   if ("mediaSession" in navigator) {
-    const track = songsList[playOrder[currentSongIndex]];
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: track.key,
-      artist: track.author,
+    navigator.mediaSession.metadata = new MediaMetadata(metadata);
+    navigator.mediaSession.setPositionState({
+      duration: audio.duration || 0,
+      position: audio.currentTime || 0,
     });
   }
 }
-// function playTrack() {
-//   audio.pause();
-//   currentSongIndex = index;
-//   audio = new Audio(songsList[playOrder[currentSongIndex]].link);
-//   audio.play();
-//   startRotation();
-//   updateMediaSessionMetadata();
-//   audio.onended = () => playSong((currentSongIndex + 1) % playOrder.length);
-//   audio.ontimeupdate = () => {
-//     progressBar.value = Math.floor(audio.currentTime);
-//     progressBar.max = Math.floor(audio.duration);
-//     currentP.textContent = `${Math.floor(audio.currentTime / 60)}:${String(
-//       Math.floor(audio.currentTime % 60)
-//     ).padStart(2, "0")}`;
-//   };
-
-//   progressBar.oninput = () => (audio.currentTime = progressBar.value);
-//   updateUI();
-// }
-// function togglePlayPause() {
-//   if (audio.paused) {
-//     if (wasPlayed == 0) {
-//       playSong(0);
-//       wasPlayed = 1;
-//     }
-//     audio.play();
-//     startRotation();
-//   } else {
-//     audio.pause();
-//     stopRotation();
-//   }
-//   updatePlayPauseButton();
-// }
 function nextTrack() {
   if (wasPlayed == 0) {
     playSong(0);
     wasPlayed = 1;
   }
   playSong((currentSongIndex + 1) % playOrder.length);
-  updateMediaSessionMetadata(); // Используем существующую функцию
+  updateMediaSessionMetadata();
   if (modalMode == "songText") {
     songsTexts.songsTextsFunction(playOrder[currentSongIndex]);
   }
@@ -484,7 +456,7 @@ function prevTrack() {
     wasPlayed = 1;
   }
   playSong((currentSongIndex - 1 + playOrder.length) % playOrder.length);
-  updateMediaSessionMetadata(); // Используем существующую функцию
+  updateMediaSessionMetadata();
   if (modalMode == "songText") {
     songsTexts.songsTextsFunction(playOrder[currentSongIndex]);
   }
@@ -498,7 +470,7 @@ if ("mediaSession" in navigator) {
     }
     audio.play();
     startRotation();
-    updateMediaSessionMetadata(); // Обновление метаданных
+    updateMediaSessionMetadata();
   });
   navigator.mediaSession.setActionHandler("pause", () => {
     audio.pause();
