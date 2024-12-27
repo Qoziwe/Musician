@@ -433,69 +433,63 @@ function updateMediaSessionMetadata() {
     });
   }
 }
-function playTrack() {
-  audio.pause();
-  currentSongIndex = index;
-  audio = new Audio(songsList[playOrder[currentSongIndex]].link);
-  audio.play();
-  startRotation();
-  updateMediaSessionMetadata();
-  audio.onended = () => playSong((currentSongIndex + 1) % playOrder.length);
-  audio.ontimeupdate = () => {
-    progressBar.value = Math.floor(audio.currentTime);
-    progressBar.max = Math.floor(audio.duration);
-    currentP.textContent = `${Math.floor(audio.currentTime / 60)}:${String(
-      Math.floor(audio.currentTime % 60)
-    ).padStart(2, "0")}`;
-  };
+// function playTrack() {
+//   audio.pause();
+//   currentSongIndex = index;
+//   audio = new Audio(songsList[playOrder[currentSongIndex]].link);
+//   audio.play();
+//   startRotation();
+//   updateMediaSessionMetadata();
+//   audio.onended = () => playSong((currentSongIndex + 1) % playOrder.length);
+//   audio.ontimeupdate = () => {
+//     progressBar.value = Math.floor(audio.currentTime);
+//     progressBar.max = Math.floor(audio.duration);
+//     currentP.textContent = `${Math.floor(audio.currentTime / 60)}:${String(
+//       Math.floor(audio.currentTime % 60)
+//     ).padStart(2, "0")}`;
+//   };
 
-  progressBar.oninput = () => (audio.currentTime = progressBar.value);
-  updateUI();
-}
-function togglePlayPause() {
-  if (audio.paused) {
-    if (wasPlayed == 0) {
-      playSong(0);
-      wasPlayed = 1;
-    }
-    audio.play();
-    startRotation();
-  } else {
-    audio.pause();
-    stopRotation();
-  }
-  updatePlayPauseButton();
-}
+//   progressBar.oninput = () => (audio.currentTime = progressBar.value);
+//   updateUI();
+// }
+// function togglePlayPause() {
+//   if (audio.paused) {
+//     if (wasPlayed == 0) {
+//       playSong(0);
+//       wasPlayed = 1;
+//     }
+//     audio.play();
+//     startRotation();
+//   } else {
+//     audio.pause();
+//     stopRotation();
+//   }
+//   updatePlayPauseButton();
+// }
 function nextTrack() {
   if (wasPlayed == 0) {
     playSong(0);
     wasPlayed = 1;
   }
   playSong((currentSongIndex + 1) % playOrder.length);
+  updateMediaSessionMetadata(); // Используем существующую функцию
   if (modalMode == "songText") {
-    if (isShuffled) {
-      songsTexts.songsTextsFunction(playOrder[currentSongIndex]);
-    } else {
-      songsTexts.songsTextsFunction(playOrder[currentSongIndex]);
-    }
+    songsTexts.songsTextsFunction(playOrder[currentSongIndex]);
   }
-  updateMediaSessionMetadata();
 }
+
 function prevTrack() {
   if (wasPlayed == 0) {
     playSong(0);
     wasPlayed = 1;
   }
   playSong((currentSongIndex - 1 + playOrder.length) % playOrder.length);
+  updateMediaSessionMetadata(); // Используем существующую функцию
   if (modalMode == "songText") {
-    if (isShuffled) {
-      songsTexts.songsTextsFunction(playOrder[currentSongIndex]);
-    } else {
-      songsTexts.songsTextsFunction(playOrder[currentSongIndex]);
-    }
+    songsTexts.songsTextsFunction(playOrder[currentSongIndex]);
   }
-  updateMediaSessionMetadata();
 }
+
 if ("mediaSession" in navigator) {
   navigator.mediaSession.setActionHandler("play", () => {
     if (wasPlayed == 0) {
@@ -504,6 +498,7 @@ if ("mediaSession" in navigator) {
     }
     audio.play();
     startRotation();
+    updateMediaSessionMetadata(); // Обновление метаданных
   });
   navigator.mediaSession.setActionHandler("pause", () => {
     audio.pause();
@@ -512,4 +507,3 @@ if ("mediaSession" in navigator) {
   navigator.mediaSession.setActionHandler("nexttrack", nextTrack);
   navigator.mediaSession.setActionHandler("previoustrack", prevTrack);
 }
-updateMediaSessionMetadata();
