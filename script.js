@@ -304,36 +304,38 @@ document.onkeydown = function spaceButton(button) {
 };
 
 if ('mediaSession' in navigator) {
-  const currentSong = songsList[playOrder[currentSongIndex]]
+  const currentSong = songsList[playOrder[currentSongIndex]];
+  
+  // Убедитесь, что currentSong содержит правильные данные
   navigator.mediaSession.metadata = new MediaMetadata({
-    title: currentSong.key,
-    artist: currentSong.author,
+    title: currentSong.key, // название трека
+    artist: currentSong.author, // исполнитель
     artwork: [
-      { src: currentSong.link },
+      { src: currentSong.link, sizes: '96x96', type: 'image/jpeg' }, // изображение обложки
     ]
   });
 
-  // Управление кнопками
+  // Управление кнопками через уведомления
   navigator.mediaSession.setActionHandler('play', function() {
-    // Код для воспроизведения
     audio.play();
   });
+  
   navigator.mediaSession.setActionHandler('pause', function() {
-    // Код для паузы
     audio.pause();
   });
+  
   navigator.mediaSession.setActionHandler('seekbackward', function(details) {
-    // Перемотка назад
     audio.currentTime = Math.max(audio.currentTime - (details.seekOffset || 10), 0);
   });
+  
   navigator.mediaSession.setActionHandler('seekforward', function(details) {
-    // Перемотка вперед
     audio.currentTime = Math.min(audio.currentTime + (details.seekOffset || 10), audio.duration);
   });
+  
   navigator.mediaSession.setActionHandler('stop', function() {
-    // Остановка
     audio.pause();
     audio.currentTime = 0;
   });
 }
+
 updateUI();
