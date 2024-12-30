@@ -303,4 +303,37 @@ document.onkeydown = function spaceButton(button) {
   }
 };
 
+if ('mediaSession' in navigator) {
+  const currentSong = songsList[playOrder[currentSongIndex]]
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: currentSong.key,
+    artist: currentSong.author,
+    artwork: [
+      { src: currentSong.link },
+    ]
+  });
+
+  // Управление кнопками
+  navigator.mediaSession.setActionHandler('play', function() {
+    // Код для воспроизведения
+    audio.play();
+  });
+  navigator.mediaSession.setActionHandler('pause', function() {
+    // Код для паузы
+    audio.pause();
+  });
+  navigator.mediaSession.setActionHandler('seekbackward', function(details) {
+    // Перемотка назад
+    audio.currentTime = Math.max(audio.currentTime - (details.seekOffset || 10), 0);
+  });
+  navigator.mediaSession.setActionHandler('seekforward', function(details) {
+    // Перемотка вперед
+    audio.currentTime = Math.min(audio.currentTime + (details.seekOffset || 10), audio.duration);
+  });
+  navigator.mediaSession.setActionHandler('stop', function() {
+    // Остановка
+    audio.pause();
+    audio.currentTime = 0;
+  });
+}
 updateUI();
