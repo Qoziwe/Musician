@@ -305,38 +305,51 @@ document.onkeydown = function spaceButton(button) {
 
 if ('mediaSession' in navigator) {
   const currentSong = songsList[playOrder[currentSongIndex]];
-  
+
   // Убедитесь, что currentSong содержит правильные данные
   navigator.mediaSession.metadata = new MediaMetadata({
-    title: currentSong.key, // название трека
-    artist: currentSong.author, // исполнитель
-    artwork: [
-      { src: currentSong.link, sizes: '96x96', type: 'image/jpeg' }, // изображение обложки
-    ]
+    title: `${currentSong.key}`, // название трека
+    artist: `${currentSong.author}`, // исполнитель
+    //artwork: [
+    //  { src: currentSong.link, sizes: '96x96', type: 'image/jpeg' }, // изображение обложки
+    //]
   });
 
   // Управление кнопками через уведомления
   navigator.mediaSession.setActionHandler('play', function() {
     audio.play();
   });
-  
+
   navigator.mediaSession.setActionHandler('pause', function() {
     audio.pause();
   });
-  
+
+  // Перелистнуть на предыдущую песню
   navigator.mediaSession.setActionHandler('seekbackward', function(details) {
-    audio.currentTime = Math.max(audio.currentTime - (details.seekOffset || 10), 0);
+    // Переход к предыдущей песне
+    currentSongIndex = (currentSongIndex - 1 + songsList.length) % songsList.length;
+    const nextSong = songsList[playOrder[currentSongIndex]];
+    // Включить новую песню
+    audio.src = nextSong.url;
+    audio.play();
   });
-  
+
+  // Перелистнуть на следующую песню
   navigator.mediaSession.setActionHandler('seekforward', function(details) {
-    audio.currentTime = Math.min(audio.currentTime + (details.seekOffset || 10), audio.duration);
+    // Переход к следующей песне
+    currentSongIndex = (currentSongIndex + 1) % songsList.length;
+    const nextSong = songsList[playOrder[currentSongIndex]];
+    // Включить новую песню
+    audio.src = nextSong.url;
+    audio.play();
   });
-  
+
   navigator.mediaSession.setActionHandler('stop', function() {
     audio.pause();
     audio.currentTime = 0;
   });
 }
+
 
 
 updateUI();
